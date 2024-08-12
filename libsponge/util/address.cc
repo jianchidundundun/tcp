@@ -87,17 +87,30 @@ Address::Address(const string &ip, const uint16_t port)
     : Address(ip, ::to_string(port), make_hints(AI_NUMERICHOST | AI_NUMERICSERV, AF_INET)) {}
 
 // accessors
+// pair<string, uint16_t> Address::ip_port() const {
+//     array<char, NI_MAXHOST> ip{};
+//     array<char, NI_MAXSERV> port{};
+
+//     const int gni_ret =
+//         getnameinfo(_address, _size, ip.data(), ip.size(), port.data(), port.size(), NI_NUMERICHOST | NI_NUMERICSERV);
+//     if (gni_ret != 0) {
+//         throw tagged_error(gai_error_category(), "getnameinfo", gni_ret);
+//     }
+
+//     return {ip.data(), stoi(port.data())};
+// }
+
 pair<string, uint16_t> Address::ip_port() const {
-    array<char, NI_MAXHOST> ip{};
-    array<char, NI_MAXSERV> port{};
+    char ip[NI_MAXHOST]{};
+    char port[NI_MAXSERV]{};
 
     const int gni_ret =
-        getnameinfo(_address, _size, ip.data(), ip.size(), port.data(), port.size(), NI_NUMERICHOST | NI_NUMERICSERV);
+        getnameinfo(_address, _size, ip, sizeof(ip), port, sizeof(port), NI_NUMERICHOST | NI_NUMERICSERV);
     if (gni_ret != 0) {
         throw tagged_error(gai_error_category(), "getnameinfo", gni_ret);
     }
 
-    return {ip.data(), stoi(port.data())};
+    return {string(ip), static_cast<uint16_t>(stoi(port))};
 }
 
 string Address::to_string() const {
