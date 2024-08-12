@@ -39,6 +39,7 @@ void StreamReassembler::push_substring(const string &data, const size_t index, c
     //表明当前传入数据的有一部分已经放进_unassembled里边了，所以从_current - index 
     //也就是没有重叠的第一个byte 开始
     for (size_t stream_index = start_index, data_index = start_index - index; stream_index < end_index ; ++stream_index, ++data_index){
+        // 注意下边的_stream_pointer 是指针
         auto &_stream_pointer = _stream[stream_index % _capacity];
         if (_stream_pointer.second == true) {
             // if (_stream_pointer.first != data[data_index])
