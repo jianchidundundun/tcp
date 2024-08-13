@@ -3,7 +3,7 @@
 
 #include "byte_stream.hh"
 #include "stream_reassembler.hh"
-#include "tcp_segment.hh"
+#include "tcp_helpers/tcp_segment.hh"
 #include "wrapping_integers.hh"
 
 #include <optional>
